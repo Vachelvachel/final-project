@@ -1,0 +1,8 @@
+﻿WHO Region,ISO3,WHO Country Name,City or Locality,Measurement Year,PM2.5 (μg/m3),PM10 (μg/m3),NO2 (μg/m3),PM25 temporal coverage (%),PM10 temporal coverage (%),NO2 temporal coverage (%),Reference,Number and type of monitoring stations,Version of the database,Status,,
+Eastern Mediterranean Region,AFG,Afghanistan,Kabul,2019,119.77,,,18,,,"U.S. Department of State, United States Environmental Protection Agency",NA,2022,,,
+European Region,ALB,Albania,Vlore,2016,,22.71,,,,,European Environment Agency (downloaded in 2021),NA,2022,,,
+European Region,AUT,Austria,Hainburg An Der Donau,2016,,20.23,13.77,,,95.54872495,European Environment Agency (downloaded in 2021),NA,2022,,,
+Region of the Americas,CAN,Canada,Red Deer,2019,7,15,18,99.5,,94.5,Government of Canada,"1 General Population Exposure, Medium Urban Area, Residential, 1 Transportation Source Influenced, Medium Urban Area, Residential",2022,,,
+Region of the Americas,CAN,Canada,Redwater,2016,5,13,17,91,,81,Government of Canada,"1 Point Source Influenced, Non-Urban Area, Industrial",2022,,,
+European Region,CHE,Switzerland,Binningen,2017,9.82,13.53,18.8,,,98.96118721,European Environment Agency (downloaded in 2021),NA,2022,,,
+European Region,CHE,Switzerland,Bioggio,2011,,32.4,39.1,,,,BAFU,1 Industrial,2022,,,
