@@ -48,7 +48,7 @@ def prediction(df: pd.DataFrame) -> None:
 
 def main():
     df = pd.read_csv("pollution.csv", na_values=["---"])
-    load_data(df)
+    df = load_data(df)
     prediction(df)
 
 

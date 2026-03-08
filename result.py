@@ -48,9 +48,9 @@ def pm25_increase(df: pd.DataFrame) -> str:
         region_df = df[df['WHO Region'] == region]
         pm25_2010 = region_df[region_df['Measurement Year'] == 2010][
                     'PM2.5 (μg/m3)'].mean()
-        pm25_2022 = region_df[region_df['Measurement Year'] == 2021][
+        pm25_2021 = region_df[region_df['Measurement Year'] == 2021][
                     'PM2.5 (μg/m3)'].mean()
-        diff = pm25_2022 - pm25_2010
+        diff = pm25_2021 - pm25_2010
         increase[region] = diff
     max_diff = increase[regions[0]]
     result = regions[0]
@@ -73,7 +73,8 @@ def highest_aqi(df: pd.DataFrame) -> str:
 
 def main():
     df = pd.read_csv("pollution.csv", na_values=["---"])
-    load_data(df)
+    df = load_data(df)
+    pm25_average(df)
     print('The region with the most significant increase in the level of'
           'PM2.5 concentrations is ' + pm25_increase(df))
     print('The region with the highest pollution level based on AQI is: ' +
