@@ -1,13 +1,12 @@
 """
 This module explores the research question 1 and 3:
-Which WHO region has the most significant increase in the level
+Which WHO region has the most significant change in the level
 of PM2.5 concentrations?
 Which region has the highest pollution level measured by
 AQI(Air Quality Index)?
 """
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+import plotly.express as px
 import eda
 
 
@@ -28,13 +27,12 @@ def pm25_average(df: pd.DataFrame) -> None:
     """
     df_grouped = df.groupby(['WHO Region', 'Measurement Year']
                             )['PM2.5 (μg/m3)'].mean().reset_index()
-    sns.set_theme()
-    sns.lineplot(data=df_grouped, x="Measurement Year", y="PM2.5 (μg/m3)",
-                 hue="WHO Region")
-    plt.xlabel("Year")
-    plt.ylabel("PM2.5 Concentration (μg/m3)")
-    plt.title("Average PM2.5 Concentration by WHO Region")
-    plt.savefig('average_pm25.png', bbox_inches='tight')
+    fig = px.line(df_grouped, x="Measurement Year", y="PM2.5 (μg/m3)",
+                  color="WHO Region",
+                  title="Average PM2.5 Concentration by WHO Region",
+                  labels={'Measurement Year': 'Year',
+                          'PM2.5 (μg/m3)': 'PM2.5 Concentration (μg/m3)'})
+    fig.show()
 
 
 def pm25_increase(df: pd.DataFrame) -> str:
@@ -63,12 +61,20 @@ def pm25_increase(df: pd.DataFrame) -> str:
 
 def highest_aqi(df: pd.DataFrame) -> str:
     """
-    Get the region has the highest pollution level based on AQI.
+    Get the region has the highest average pollution level based on AQI.
     """
+    df = df.copy()
     df['overall_aqi'] = df[['PM2.5 (μg/m3)', 'PM10 (μg/m3)',
                             'NO2 (μg/m3)']].max(axis=1)
-    max_aqi_by_region = df.groupby('WHO Region')['overall_aqi'].max()
-    return max_aqi_by_region.idxmax()
+    avg_aqi_by_region = (df.groupby('WHO Region')['overall_aqi']
+                         .mean())
+    avg_aqi_df = avg_aqi_by_region.reset_index()
+    fig = px.bar(avg_aqi_df, x="WHO Region", y="overall_aqi",
+                 color="WHO Region",
+                 title="Average AQI by WHO Region",
+                 labels={'overall_aqi': "Average AQI"})
+    fig.show()
+    return avg_aqi_by_region.idxmax()
 
 
 def main():

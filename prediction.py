@@ -4,9 +4,10 @@ What will the PM2.5 concentration of the European region be in 2027?
 """
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error
 import eda
 
 
@@ -28,14 +29,21 @@ def prediction(df: pd.DataFrame) -> None:
     europe = df[df['WHO Region'] == "European Region"]
     europe = europe[europe['Measurement Year'].notna() &
                     europe['PM2.5 (μg/m3)'].notna()]
-    # average = (europe.groupby('Measurement Year')['PM2.5 (μg/m3)']
-    #            .mean().reset_index())
     x = europe[['Measurement Year']]
     y = europe['PM2.5 (μg/m3)']
+    # Using the data from 2010-2018 as our training data and
+    # data after 2019 as the testing data.
+    train = europe[europe['Measurement Year'] <= 2018]
+    test = europe[europe['Measurement Year'] >= 2019]
+    x_train = train[['Measurement Year']]
+    y_train = train['PM2.5 (μg/m3)']
+    x_test = test[['Measurement Year']]
+    y_test = test['PM2.5 (μg/m3)']
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
-    model = DecisionTreeRegressor()
+    model = LinearRegression()
     model.fit(x_train, y_train)
     predictions = model.predict(x_test)
+    mse = mean_squared_error(y_test, predictions)
     grid = sns.relplot(x=y_test, y=predictions)
     grid.set(title="Observed PM2.5 v. Predicted PM2.5",
              xlabel='Observed PM2.5',
@@ -43,7 +51,8 @@ def prediction(df: pd.DataFrame) -> None:
     grid.ax.axline((0, 0), slope=1, color='k', ls='--')
     plt.savefig('pm25_prediction.png', bbox_inches='tight')
     predict_2027 = model.predict([[2027]])
-    print('Predicted PM2.5 concentration in 2027 is: ' + str(predict_2027))
+    print('Predicted PM2.5 concentration in 2027 is: ' + str(predict_2027)
+          + 'mean squared error: ' + str(mse))
 
 
 def main():
