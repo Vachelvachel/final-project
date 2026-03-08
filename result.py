@@ -1,3 +1,10 @@
+"""
+This module explores the research question 1 and 3:
+Which WHO region has the most significant increase in the level
+of PM2.5 concentrations?
+Which region has the highest pollution level measured by
+AQI(Air Quality Index)?
+"""
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -5,6 +12,9 @@ import eda
 
 
 def load_data(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Cleaning the dataset and extract the columns we focused on.
+    """
     col_focus = ["WHO Region", "WHO Country Name", "Measurement Year",
                  "PM2.5 (μg/m3)", "PM10 (μg/m3)", "NO2 (μg/m3)"]
     df_focus = eda.clean(df, col_focus)
@@ -12,6 +22,10 @@ def load_data(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def pm25_average(df: pd.DataFrame) -> None:
+    """
+    Visualize the trend of average PM2.5 concentration for different regions
+    by year.
+    """
     df_grouped = df.groupby(['WHO Region', 'Measurement Year']
                             )['PM2.5 (μg/m3)'].mean().reset_index()
     sns.set_theme()
@@ -24,6 +38,10 @@ def pm25_average(df: pd.DataFrame) -> None:
 
 
 def pm25_increase(df: pd.DataFrame) -> str:
+    """
+    Get the region has the most significant increase in the level
+    of PM2.5 concentrations
+    """
     regions = df['WHO Region'].unique()
     increase = {}
     for region in regions:
@@ -43,11 +61,23 @@ def pm25_increase(df: pd.DataFrame) -> str:
     return result
 
 
+def highest_aqi(df: pd.DataFrame) -> str:
+    """
+    Get the region has the highest pollution level based on AQI.
+    """
+    df['overall_aqi'] = df[['PM2.5 (μg/m3)', 'PM10 (μg/m3)',
+                            'NO2 (μg/m3)']].max(axis=1)
+    max_aqi_by_region = df.groupby('WHO Region')['overall_aqi'].max()
+    return max_aqi_by_region.idxmax()
+
+
 def main():
     df = pd.read_csv("pollution.csv", na_values=["---"])
     load_data(df)
     print('The region with the most significant increase in the level of'
           'PM2.5 concentrations is ' + pm25_increase(df))
+    print('The region with the highest pollution level based on AQI is: ' +
+          highest_aqi(df))
 
 
 if __name__ == '__main__':
