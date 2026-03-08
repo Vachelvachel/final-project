@@ -1,5 +1,5 @@
 """
-Testing functions in eda.py and result.py
+Testing functions in eda.py
 """
 import pandas as pd
 import eda
