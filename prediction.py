@@ -44,12 +44,6 @@ def prediction(df: pd.DataFrame) -> None:
     model.fit(x_train, y_train)
     predictions = model.predict(x_test)
     mse = mean_squared_error(y_test, predictions)
-    grid = sns.relplot(x=y_test, y=predictions)
-    grid.set(title="Observed PM2.5 v. Predicted PM2.5",
-             xlabel='Observed PM2.5',
-             ylabel='Predicted PM2.5')
-    grid.ax.axline((0, 0), slope=1, color='k', ls='--')
-    plt.savefig('pm25_prediction.png', bbox_inches='tight')
     predict_2027 = model.predict([[2027]])
     print('Predicted PM2.5 concentration in 2027 is: ' + str(predict_2027)
           + 'mean squared error: ' + str(mse))
