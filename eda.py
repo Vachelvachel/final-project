@@ -19,7 +19,7 @@ def clean(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     row_missing = df.isna().any(axis=1).sum()
     total = df.shape[0]
     percentage = (row_missing/total) * 100
-    print(percentage)
+    print("missing value percentage: ", str(percentage))
     df1 = df.dropna()
     print("Number of rows after dropping missing values:", df1.shape[0])
     return df1
